@@ -108,4 +108,17 @@ public class GridTests
         var grid = new Grid<int>(W, H);
         return grid.GetNeighbors4(x, y).Count;
     }
+
+    [TestCase(0, 0, ExpectedResult = 3)]          // corner
+    [TestCase(W - 1, 0, ExpectedResult = 3)]      // corner
+    [TestCase(0, H - 1, ExpectedResult = 3)]      // corner
+    [TestCase(W - 1, H - 1, ExpectedResult = 3)]  // corner
+    [TestCase(3, 0, ExpectedResult = 5)]          // bottom edge
+    [TestCase(0, 4, ExpectedResult = 5)]          // left edge
+    [TestCase(3, 4, ExpectedResult = 8)]          // inner
+    public int GetNeighbors8_ReturnsCorrectCount(int x, int y)
+    {
+        var grid = new Grid<int>(W, H);
+        return grid.GetNeighbors8(x, y).Count;
+    }
 }

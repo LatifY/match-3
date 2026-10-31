@@ -9,7 +9,9 @@ namespace Match3.Core
         public int Height { get; }
         readonly T[] cells;
 
-        static readonly int[,] dirs = { { 1, 0 }, {-1, 0}, {0, 1}, {0, -1} };
+        static readonly int[,] dirs4 = { { 1, 0 }, {-1, 0}, {0, 1}, {0, -1} };
+        static readonly int[,] dirs8 = { { 1, 0 }, {-1, 0}, {0, 1}, {0, -1},
+                                        { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 }};
 
         public Grid(int width, int height)
         {
@@ -60,6 +62,16 @@ namespace Match3.Core
         }
 
         public List<T> GetNeighbors4(int x, int y)
+        {
+            return GetNeighbors(x,y, dirs4);
+        }
+
+        public List<T> GetNeighbors8(int x, int y)
+        {
+            return GetNeighbors(x,y, dirs8);
+        }
+
+        private List<T> GetNeighbors(int x, int y, int[,] dirs)
         {
             List<T> list = new List<T>();
             for (int i = 0; i < dirs.GetLength(0); i++)
