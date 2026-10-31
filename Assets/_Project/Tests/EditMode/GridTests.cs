@@ -13,7 +13,7 @@ public class GridTests
         Grid<int> grid = new Grid<int>(w, h);
         for (int i = 0; i < w * h; i++)
         {
-            var (x,y) = grid.GetCoordinates(i);
+            var (x, y) = grid.GetCoordinates(i);
             Assert.AreEqual(i, grid.GetIndex(x, y));
         }
     }
@@ -44,5 +44,68 @@ public class GridTests
         int w = 7, h = 9;
         Grid<int> grid = new Grid<int>(w, h);
         return grid.TryGetCell(x, y, out int val);
+    }
+
+    [Test]
+    public void SetCell_ThenGetCell()
+    {
+        int w = 7, h = 9;
+        Grid<int> grid = new Grid<int>(w, h);
+
+        grid.SetCell(3, 3, 5);
+
+        Assert.AreEqual(5, grid.GetCell(3, 3));
+    }
+
+
+
+    const int W = 7, H = 9;
+
+    [TestCase(0, 9)]
+    [TestCase(7, -1)]
+    [TestCase(-3, -3)]
+    public void Constructor_InvalidSize_Throws(int w, int h)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => new Grid<int>(w, h));
+    }
+
+    [TestCase(W, 0)]
+    [TestCase(0, H)]
+    [TestCase(-1, 0)]
+    [TestCase(0, -1)]
+    public void GetCell_Outside_Throws(int x, int y)
+    {
+        var grid = new Grid<int>(W, H);
+        Assert.Throws<ArgumentOutOfRangeException>(() => grid.GetCell(x, y));
+    }
+
+    [TestCase(W, 0)]
+    [TestCase(0, H)]
+    public void SetCell_Outside_Throws(int x, int y)
+    {
+        var grid = new Grid<int>(W, H);
+        Assert.Throws<ArgumentOutOfRangeException>(() => grid.SetCell(x, y, 1));
+    }
+
+    [TestCase(-1)]
+    [TestCase(W * H)]
+    public void GetCoordinates_OutOfRange_Throws(int index)
+    {
+        var grid = new Grid<int>(W, H);
+        Assert.Throws<ArgumentOutOfRangeException>(() => grid.GetCoordinates(index));
+    }
+
+    // ---- neighbors ----
+    [TestCase(0, 0, ExpectedResult = 2)]          // corner
+    [TestCase(W - 1, 0, ExpectedResult = 2)]      // corner
+    [TestCase(0, H - 1, ExpectedResult = 2)]      // corner
+    [TestCase(W - 1, H - 1, ExpectedResult = 2)]  // corner
+    [TestCase(3, 0, ExpectedResult = 3)]          // bottom edge
+    [TestCase(0, 4, ExpectedResult = 3)]          // left edge
+    [TestCase(3, 4, ExpectedResult = 4)]          // inner
+    public int GetNeighbors4_ReturnsCorrectCount(int x, int y)
+    {
+        var grid = new Grid<int>(W, H);
+        return grid.GetNeighbors4(x, y).Count;
     }
 }
