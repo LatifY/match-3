@@ -1,4 +1,12 @@
-public enum TileType
+namespace Match3.Core
 {
-    None, Red, Green, Blue, Yellow, Pink
+    public enum TileType
+    {
+        None = 0,
+        Red = 1,
+        Green = 2,
+        Blue = 3,
+        Yellow = 4,
+        Pink = 5
+    }
 }
